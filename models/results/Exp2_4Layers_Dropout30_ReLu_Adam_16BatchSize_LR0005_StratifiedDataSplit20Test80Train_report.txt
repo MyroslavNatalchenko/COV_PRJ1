@@ -1,0 +1,59 @@
+              precision    recall  f1-score   support
+
+           0       0.26      0.51      0.35        39
+           1       0.70      0.17      0.28        40
+           2       0.00      0.00      0.00        40
+           3       0.32      0.30      0.31        40
+           4       0.15      0.15      0.15        40
+           5       0.43      0.50      0.46        40
+           6       0.33      0.45      0.38        40
+           7       0.39      0.86      0.54        37
+           8       0.25      0.10      0.14        40
+           9       0.27      0.07      0.12        40
+          10       0.41      0.17      0.25        40
+          11       0.71      0.53      0.61        38
+          12       0.17      0.15      0.16        39
+          13       0.33      0.10      0.15        40
+          14       0.34      0.28      0.31        40
+          15       0.31      0.42      0.36        40
+          16       0.14      0.12      0.13        40
+          17       0.28      0.60      0.38        40
+          18       0.45      0.55      0.49        40
+          19       0.38      0.42      0.40        40
+          20       0.35      0.20      0.25        40
+          21       0.21      0.38      0.27        40
+          22       0.44      0.54      0.48        39
+          23       0.69      0.23      0.34        40
+          24       0.32      0.42      0.37        40
+          25       0.45      0.35      0.39        40
+          26       0.29      0.28      0.28        40
+          27       0.33      0.42      0.37        40
+          28       0.35      0.33      0.34        40
+          29       0.29      0.62      0.39        40
+          30       0.31      0.42      0.36        40
+          31       0.29      0.15      0.20        40
+          32       0.37      0.55      0.44        40
+          33       0.24      0.17      0.20        40
+          34       0.17      0.13      0.15        38
+          35       0.21      0.07      0.11        40
+          36       0.24      0.23      0.23        40
+
+    accuracy                           0.32      1470
+   macro avg       0.33      0.32      0.30      1470
+weighted avg       0.33      0.32      0.30      1470
+
+Epoch [1/15] Train Loss: 3.5794, Train Acc: 5.87% | Val Loss: 3.2149, Val Acc: 12.18%
+Epoch [2/15] Train Loss: 3.2882, Train Acc: 10.61% | Val Loss: 3.1093, Val Acc: 14.15%
+Epoch [3/15] Train Loss: 3.1453, Train Acc: 13.95% | Val Loss: 2.9753, Val Acc: 16.53%
+Epoch [4/15] Train Loss: 3.0846, Train Acc: 14.88% | Val Loss: 2.9072, Val Acc: 20.14%
+Epoch [5/15] Train Loss: 3.0191, Train Acc: 16.33% | Val Loss: 2.8151, Val Acc: 22.72%
+Epoch [6/15] Train Loss: 2.9583, Train Acc: 17.86% | Val Loss: 2.7669, Val Acc: 22.04%
+Epoch [7/15] Train Loss: 2.9057, Train Acc: 18.91% | Val Loss: 2.7489, Val Acc: 22.93%
+Epoch [8/15] Train Loss: 2.8712, Train Acc: 19.32% | Val Loss: 2.6871, Val Acc: 25.78%
+Epoch [9/15] Train Loss: 2.8249, Train Acc: 20.92% | Val Loss: 2.6127, Val Acc: 26.60%
+Epoch [10/15] Train Loss: 2.7663, Train Acc: 22.13% | Val Loss: 2.6350, Val Acc: 26.73%
+Epoch [11/15] Train Loss: 2.7300, Train Acc: 23.64% | Val Loss: 2.6196, Val Acc: 25.58%
+Epoch [12/15] Train Loss: 2.6989, Train Acc: 25.23% | Val Loss: 2.5172, Val Acc: 28.10%
+Epoch [13/15] Train Loss: 2.6479, Train Acc: 25.53% | Val Loss: 2.4679, Val Acc: 29.80%
+Epoch [14/15] Train Loss: 2.6327, Train Acc: 25.97% | Val Loss: 2.4382, Val Acc: 29.32%
+Epoch [15/15] Train Loss: 2.5641, Train Acc: 28.22% | Val Loss: 2.4067, Val Acc: 32.24%
