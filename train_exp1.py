@@ -4,8 +4,8 @@ import torch.optim as optim
 from torchvision import transforms
 from utils import setup_directories, get_dataloaders, train_model, evaluate_and_save, plot_metrics
 
-EXP_NAME = "exp1_model_bazowy_3_warstwy_z_dropout_LeakyRelu_Adam"
-BATCH_SIZE = 8
+EXP_NAME = "Exp1_3Layes_Dropout30_ReLu_Adam_16BatchSize_LR001_TrainTestFromDatasetCreators"
+BATCH_SIZE = 16
 LEARNING_RATE = 0.001
 NUM_EPOCHS = 15
 
@@ -15,21 +15,21 @@ class CNN_Exp1(nn.Module):
         self.features = nn.Sequential(
             nn.Conv2d(3, 32, kernel_size=3, padding=1),
             nn.BatchNorm2d(32),
-            nn.LeakyReLU(0.1),
+            nn.ReLU(),
             nn.MaxPool2d(2, 2),
-            nn.Dropout2d(p=0.2),
+            nn.Dropout2d(p=0.3),
 
             nn.Conv2d(32, 64, kernel_size=3, padding=1),
             nn.BatchNorm2d(64),
-            nn.LeakyReLU(0.1),
+            nn.ReLU(),
             nn.MaxPool2d(2, 2),
             nn.Dropout2d(p=0.3),
 
             nn.Conv2d(64, 128, kernel_size=3, padding=1),
             nn.BatchNorm2d(128),
-            nn.LeakyReLU(0.1),
+            nn.ReLU(),
             nn.MaxPool2d(2, 2),
-            nn.Dropout2d(p=0.4),
+            nn.Dropout2d(p=0.3),
         )
         self.classifier = nn.Sequential(
             nn.Flatten(),
