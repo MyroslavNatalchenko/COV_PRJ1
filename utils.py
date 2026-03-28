@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import classification_report
 from torch.utils.data import DataLoader
 from dataset import PetsDataset
+from sklearn.model_selection import train_test_split
+from torch.utils.data import Subset
 
 def setup_directories():
     os.makedirs('models', exist_ok=True)
@@ -18,11 +20,32 @@ def get_dataloaders(train_transform, test_transform, batch_size):
 
     return train_loader, test_loader
 
+def get_dataloaders_improved(train_transform, test_transform, batch_size):
+    full_dataset_train = PetsDataset(txt_file='annotations/list.txt', img_dir='images', transform=train_transform)
+    full_dataset_test = PetsDataset(txt_file='annotations/list.txt', img_dir='images', transform=test_transform)
+
+    labels = [label for _, label in full_dataset_train.img_labels]
+    indices = list(range(len(labels)))
+
+    train_idx, test_idx = train_test_split(
+        indices,
+        test_size=0.2,
+        random_state=42,
+        stratify=labels
+    )
+
+    train_dataset = Subset(full_dataset_train, train_idx)
+    test_dataset = Subset(full_dataset_test, test_idx)
+
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
+
+    return train_loader, test_loader
+
 def train_model(model, train_loader, test_loader, criterion, optimizer, num_epochs, device):
     history = {'train_loss': [], 'train_acc': [], 'val_loss': [], 'val_acc': []}
 
     for epoch in range(num_epochs):
-        # --- TRAINING ---
         model.train()
         running_loss = 0.0
         correct = 0
@@ -46,7 +69,6 @@ def train_model(model, train_loader, test_loader, criterion, optimizer, num_epoc
         epoch_train_loss = running_loss / total
         epoch_train_acc = 100 * correct / total
 
-        # --- VALIDATION ---
         model.eval()
         val_loss = 0.0
         val_correct = 0
@@ -76,6 +98,68 @@ def train_model(model, train_loader, test_loader, criterion, optimizer, num_epoc
               f"Val Loss: {epoch_val_loss:.4f}, Val Acc: {epoch_val_acc:.2f}%")
 
     return history
+
+def train_model_exp4(model, train_loader, test_loader, criterion, optimizer, scheduler, num_epochs, device):
+    history = {'train_loss': [], 'train_acc': [], 'val_loss': [], 'val_acc': []}
+
+    for epoch in range(num_epochs):
+        model.train()
+        running_loss = 0.0
+        correct = 0
+        total = 0
+
+        for images, labels in train_loader:
+            images, labels = images.to(device), labels.to(device)
+
+            optimizer.zero_grad()
+            outputs = model(images)
+            loss = criterion(outputs, labels)
+
+            loss.backward()
+            optimizer.step()
+
+            running_loss += loss.item() * images.size(0)
+            _, predicted = torch.max(outputs.data, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+
+        epoch_train_loss = running_loss / total
+        epoch_train_acc = 100 * correct / total
+
+        model.eval()
+        val_loss = 0.0
+        val_correct = 0
+        val_total = 0
+
+        with torch.no_grad():
+            for images, labels in test_loader:
+                images, labels = images.to(device), labels.to(device)
+                outputs = model(images)
+                loss = criterion(outputs, labels)
+
+                val_loss += loss.item() * images.size(0)
+                _, predicted = torch.max(outputs.data, 1)
+                val_total += labels.size(0)
+                val_correct += (predicted == labels).sum().item()
+
+        epoch_val_loss = val_loss / val_total
+        epoch_val_acc = 100 * val_correct / val_total
+
+        scheduler.step()
+        current_lr = scheduler.get_last_lr()[0]
+
+        history['train_loss'].append(epoch_train_loss)
+        history['train_acc'].append(epoch_train_acc)
+        history['val_loss'].append(epoch_val_loss)
+        history['val_acc'].append(epoch_val_acc)
+
+        print(f"Epoch [{epoch + 1}/{num_epochs}] "
+              f"Train Loss: {epoch_train_loss:.4f}, Train Acc: {epoch_train_acc:.2f}% | "
+              f"Val Loss: {epoch_val_loss:.4f}, Val Acc: {epoch_val_acc:.2f}% | "
+              f"LR: {current_lr:.6f}")
+
+    return history
+
 
 def evaluate_and_save(model, test_loader, device, exp_name):
     model.eval()
